@@ -7,8 +7,10 @@ public class GameController : MonoBehaviour
   public TrailController TrailController;
   public List<Bird> Birds;
   public List<Enemy> Enemies;
+  public BoxCollider2D TapCollider;
 
   private bool _isGameEnded = false;
+  private Bird _shotBird;
 
   void Start()
   {
@@ -23,11 +25,14 @@ public class GameController : MonoBehaviour
       Enemies[i].OnEnemyDestroyed += CheckGameEnd;
     }
 
+    TapCollider.enabled = false;
     SlingShooter.InitiateBird(Birds[0]);
+    _shotBird = Birds[0];
   }
 
   public void ChangeBird()
   {
+    TapCollider.enabled = false;
 
     if (_isGameEnded)
     {
@@ -37,7 +42,10 @@ public class GameController : MonoBehaviour
     Birds.RemoveAt(0);
 
     if (Birds.Count > 0)
+    {
       SlingShooter.InitiateBird(Birds[0]);
+      _shotBird = Birds[0];
+    }
   }
 
   public void CheckGameEnd(GameObject destroyedEnemy)
@@ -61,5 +69,14 @@ public class GameController : MonoBehaviour
   {
     TrailController.SetBird(bird);
     StartCoroutine(TrailController.SpawnTrail());
+    TapCollider.enabled = true;
+  }
+
+  void OnMouseUp()
+  {
+    if (_shotBird != null)
+    {
+      _shotBird.OnTap();
+    }
   }
 }

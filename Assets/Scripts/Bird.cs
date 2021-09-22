@@ -69,5 +69,8 @@ public class Bird : MonoBehaviour
     RigidBody.velocity = velocity * speed * distance;
     OnBirdShot(this);
   }
-
+  public virtual void OnTap()
+  {
+    //Do nothing
+  }
 }
